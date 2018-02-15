@@ -14,6 +14,7 @@ import Users.Application;
 import Data.DataIO;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,52 +45,52 @@ public class ApplicationHandler extends HttpServlet {
         String regNo = request.getParameter("regNo");
         String gender = request.getParameter("gender");
        
-       
+       HttpSession session = request.getSession();
+      
        if(DataIO.validate(fname, lname, choice, gender, regNo))
        {
+           Application user = new Application(fname, lname, choice, gender, regNo);
+           
+           // Validate the parameters
+            String message = "";
+            String url = "";
+       
+            if (fname.length() == 0 || lname.length() == 0 || choice.length() == 0 || gender.length()== 0 ||
+               regNo.length() == 0)
+            {
+                message = "Please fill out missing values in the text boxes.";
+                url = "confucius/applicationFormHandler.jsp";
+            }
+            else
+            {
+                message = "";
+           
+                 url = "confucius/applicationFormHandler.jsp"; // *show you the entry.
+            }
+            request.setAttribute("user", user);
+            request.setAttribute("message", message);
+       
+       // forward request and response objects to JSP page
+       
+            if (choice == "No")
+            {
+                url = "confucius/goodBye.jsp";
+            }
+            else
+            {
+                url = "confucius/proficiencyTest.html";
+            }
+           
            RequestDispatcher rd=request.getRequestDispatcher("proficiencyTest.html");
            rd.forward(request, response);
        }
        else
        {
-           out.print("<p style=\"color:red\">Sorry Fields error</p>");  
+            out.print("<p style=\"color:red\">Sorry Fields error</p>");  
             RequestDispatcher rd=request.getRequestDispatcher("applicationHandler.jsp");  
             rd.include(request,response);
        }
-       out.close();
-       // create the User object from the parameters
-       Application user = new Application(fname, lname, choice, gender, regNo);
-       
-       // Validate the parameters
-//       String message = "";
-//       String url = "";
-//       
-//       if (fname.length() == 0 || lname.length() == 0 || choice.length() == 0 || gender.length()== 0 ||
-//               regNo.length() == 0)
-//       {
-//           message = "Please fill out missing values in the text boxes.";
-//           url = "confucius/applicationFormHandler.jsp";
-//       }
-//       else
-//       {
-//           message = "";
-//           
-//           url = "confucius/applicationFormHandler.jsp"; // *show you the entry.
-//       }
-//       request.setAttribute("user", user);
-//       request.setAttribute("message", message);
-//       
-//       // forward request and response objects to JSP page
-//       
-//       if (choice == "no")
-//       {
-//           url = "confucius/goodBye.jsp";
-//       }
-//       else
-//       {
-//           url = "confucius/proficiencyTest.html";
-//       }
-       
+       out.close(); 
     }
 
     @Override

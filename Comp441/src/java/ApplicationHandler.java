@@ -14,7 +14,6 @@ import Users.Application;
 import Data.DataIO;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -39,15 +38,11 @@ public class ApplicationHandler extends HttpServlet {
        response.setContentType("text/html");
        PrintWriter out = response.getWriter();
        
-       String fname = request.getParameter("fname");
-       String lname = request.getParameter("lname");
-       String choice = request.getParameter("choice");
-       String regNo = request.getParameter("regNo");
-       String gender = request.getParameter("gender");
-       
-       HttpSession session = request.getSession(false);
-       if(session!=null)
-           session.setAttribute("fname", fname);
+        String fname = request.getParameter("fname");
+        String lname = request.getParameter("lname");
+        String choice = request.getParameter("choice");
+        String regNo = request.getParameter("regNo");
+        String gender = request.getParameter("gender");
        
        
        if(DataIO.validate(fname, lname, choice, gender, regNo))
@@ -66,34 +61,34 @@ public class ApplicationHandler extends HttpServlet {
        Application user = new Application(fname, lname, choice, gender, regNo);
        
        // Validate the parameters
-       String message = "";
-       String url = "";
-       
-       if (fname.length() == 0 || lname.length() == 0 || choice.length() == 0 || gender.length()== 0 ||
-               regNo.length() == 0)
-       {
-           message = "Please fill out missing values in the text boxes.";
-           url = "confucius/applicationFormHandler.jsp";
-       }
-       else
-       {
-           message = "";
-           
-           url = "confucius/applicationFormHandler.jsp"; // *show you the entry.
-       }
-       request.setAttribute("user", user);
-       request.setAttribute("message", message);
-       
-       // forward request and response objects to JSP page
-       
-       if (choice == "no")
-       {
-           url = "confucius/goodBye.jsp";
-       }
-       else
-       {
-           url = "confucius/proficiencyTest.html";
-       }
+//       String message = "";
+//       String url = "";
+//       
+//       if (fname.length() == 0 || lname.length() == 0 || choice.length() == 0 || gender.length()== 0 ||
+//               regNo.length() == 0)
+//       {
+//           message = "Please fill out missing values in the text boxes.";
+//           url = "confucius/applicationFormHandler.jsp";
+//       }
+//       else
+//       {
+//           message = "";
+//           
+//           url = "confucius/applicationFormHandler.jsp"; // *show you the entry.
+//       }
+//       request.setAttribute("user", user);
+//       request.setAttribute("message", message);
+//       
+//       // forward request and response objects to JSP page
+//       
+//       if (choice == "no")
+//       {
+//           url = "confucius/goodBye.jsp";
+//       }
+//       else
+//       {
+//           url = "confucius/proficiencyTest.html";
+//       }
        
     }
 
